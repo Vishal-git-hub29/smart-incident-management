@@ -10,7 +10,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git branch: 'master',
+                git branch: '*/main',
                 url: 'https://github.com/Vishal-git-hub29/smart-incident-management.git'
             }
         }
