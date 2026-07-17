@@ -39,19 +39,23 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                sh '''
-                docker stop smartims-backend || true
-                docker rm smartims-backend || true
+    steps {
+        sh '''
+        docker stop smartims-backend || true
+        docker rm smartims-backend || true
 
-                docker run -d \
-                  --name smartims-backend \
-                  -p 8080:8080 \
-                  $BACKEND_IMAGE
-                '''
-            }
-        }
+        docker run -d \
+          --name smartims-backend \
+          --network smartims-compose_smartims-network \
+          -p 8080:8080 \
+          -e DB_URL=jdbc:postgresql://postgres-container:5432/smartims \
+          -e DB_USERNAME=postgres \
+          -e DB_PASSWORD=postgres \
+          -e JWT_SECRET=ThisIsASecretKeyForJwtSigningMustBeAtLeast32Chars \
+          vishal29docker/smartims-backend:v1
+        '''
     }
+}
 
     post {
         success {
