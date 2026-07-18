@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         BACKEND_IMAGE = "vishal29docker/smartims-backend:v1"
-        FRONTEND_IMAGE = "vishal29docker/smartims-frontend:v2"
+        FRONTEND_IMAGE = "vishal29docker/smartims-frontend:v3"
     }
 
     stages {
@@ -52,7 +52,15 @@ pipeline {
                   -e DB_USERNAME=postgres \
                   -e DB_PASSWORD=postgres \
                   -e JWT_SECRET=ThisIsASecretKeyForJwtSigningMustBeAtLeast32Chars \
-                  vishal29docker/smartims-backend:v1
+                  $BACKEND_IMAGE
+
+                docker stop smartims-frontend || true
+                docker rm smartims-frontend || true
+
+                docker run -d \
+                  --name smartims-frontend \
+                  -p 80:80 \
+                  $FRONTEND_IMAGE
                 '''
             }
         }
