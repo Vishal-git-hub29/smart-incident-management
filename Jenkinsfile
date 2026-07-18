@@ -41,6 +41,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                docker pull $BACKEND_IMAGE
+                docker pull $FRONTEND_IMAGE
+
                 docker stop smartims-backend || true
                 docker rm smartims-backend || true
 
