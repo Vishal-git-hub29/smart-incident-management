@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: smartims
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+
+  template:
+    metadata:
+      labels:
+        app: postgres
+
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16
+
+        ports:
+        - containerPort: 5432
+
+        env:
+
+        - name: POSTGRES_DB
+          value: smartims
+
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: smartims-config
+              key: DB_USERNAME
+
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smartims-secret
+              key: DB_PASSWORD
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartims-backend
+  namespace: smartims
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: smartims-backend
+
+  template:
+    metadata:
+      labels:
+        app: smartims-backend
+
+    spec:
+      containers:
+
+      - name: backend
+        image: vishal29docker/smartims-backend:v1
+
+        ports:
+        - containerPort: 8080
+
+        env:
+
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: smartims-config
+              key: DB_URL
+
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: smartims-config
+              key: DB_USERNAME
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smartims-secret
+              key: DB_PASSWORD
+
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: smartims-secret
+              key: JWT_SECRET
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartims-frontend
+  namespace: smartims
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: smartims-frontend
+
+  template:
+    metadata:
+      labels:
+        app: smartims-frontend
+
+    spec:
+      containers:
+
+      - name: frontend
+        image: vishal29docker/smartims-frontend:v3
+
+        ports:
+        - containerPort: 80

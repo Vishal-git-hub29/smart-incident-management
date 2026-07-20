@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smartims-config
+  namespace: smartims
+
+data:
+  DB_URL: "jdbc:postgresql://postgres-service:5432/smartims"
+  DB_USERNAME: "postgres"
+  FRONTEND_LOGIN_URL: "http://13.127.54.251"
