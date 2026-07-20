@@ -1,0 +1,41 @@
+---
+- name: Configure Smart IMS Server
+  hosts: smartims
+  become: yes
+
+  tasks:
+
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Enable Docker
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose-v2
+        state: present
+
+    - name: Install Java 21
+      apt:
+        name: openjdk-21-jdk
+        state: present
+
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present

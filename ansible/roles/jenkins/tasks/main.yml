@@ -1,0 +1,7 @@
+---
+- name: Install Jenkins prerequisites
+  apt:
+    name:
+      - fontconfig
+      - openjdk-21-jdk
+    state: present
