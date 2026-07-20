@@ -1,0 +1,27 @@
+groups:
+
+- name: smartims-alerts
+
+  rules:
+
+  - alert: BackendDown
+    expr: up{job="smartims-backend"} == 0
+    for: 1m
+
+    labels:
+      severity: critical
+
+    annotations:
+      summary: "Smart IMS Backend is Down"
+      description: "Backend application has not responded for one minute."
+
+  - alert: HighCPUUsage
+    expr: 100 - (avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 2m
+
+    labels:
+      severity: warning
+
+    annotations:
+      summary: "High CPU Usage"
+      description: "CPU usage has exceeded 80%."

@@ -1,0 +1,39 @@
+{
+  "title": "Smart IMS Dashboard",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Backend Availability",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job=\"smartims-backend\"}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "CPU Usage",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "100 - (avg by(instance)(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Memory Usage",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "node_memory_MemAvailable_bytes"
+        }
+      ]
+    }
+  ]
+}

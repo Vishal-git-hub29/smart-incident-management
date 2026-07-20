@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+
+rule_files:
+  - alert-rules.yml
+
+scrape_configs:
+
+  - job_name: 'smartims-backend'
+
+    metrics_path: '/actuator/prometheus'
+
+    static_configs:
+      - targets:
+          - '13.127.54.251:8080'
+
+  - job_name: 'node-exporter'
+
+    static_configs:
+      - targets:
+          - '13.127.54.251:9100'
